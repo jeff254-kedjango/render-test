@@ -1,4 +1,5 @@
 const express = require('express')
+const path = require('path');
 var morgan = require('morgan')
 const cors = require('cors')
 
@@ -7,7 +8,7 @@ app.use(express.json())
 app.use(cors())
 morgan.token('body', (req, res) => JSON.stringify(req.body));
 app.use(morgan(':method :url :status :res[content-length] :response-time ms - :body'));
-app.use(express.static('build'))
+app.use(express.static(path.join(__dirname, 'build')));
 
 
 let date = new Date()
@@ -35,9 +36,9 @@ let persons = [
     }
 ]
 
-app.get('/',(request, response) => {
-    response.send('<h1>Hello World!</h1>')
-})
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 app.get('/api/persons', (request, response) => {
     response.json(persons)
